@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, Concatenate, Input, AvgPool2D
-from tensorflow.keras.optimizers import Adam
+#from tensorflow.keras.optimizers import Adam
 import tensorflow_probability as tfp
 from src.PPO_new.Memory_ import PPOMemory
 
@@ -165,7 +165,7 @@ class PPOAgent(object):
     def learn(self):
         for _ in range(self.n_epochs):
             state_bool_arr, state_float_arr, state_scaler, action_arr,\
-            old_prob_arr, vals_arr, reward_arr, dones_arr, batches = \
+                old_prob_arr, vals_arr, reward_arr, dones_arr, batches = \
             self.memory.generate_batches()
 
             values = vals_arr
@@ -177,7 +177,7 @@ class PPOAgent(object):
                 for k in range(t, len(reward_arr)-1):
                     try:
                         a_t += discount * (reward_arr[k] + self.gamma*values[k+1] * (
-                        1-int(dones_arr[k])) - values[k])
+                            1-int(dones_arr[k])) - values[k])
                     except:
                         print("agent.py: dones and value object")
                         print(dones_arr[k], values[k])
@@ -187,11 +187,9 @@ class PPOAgent(object):
 
             for batch in batches:
                 with tf.GradientTape(persistent=True) as tape:
-                    # print("Agent.py : Check type", type(state_bool_arr[batch]), state_bool_arr[batch])
-                    boolean_map_in = state_bool_arr[batch]#[tf.newaxis, ...]
-                    float_map_in = state_float_arr[batch]#[tf.newaxis, ...]
-                    scalars = np.array(state_scaler[batch], dtype=np.single)#[tf.newaxis, ...]
-                   # print(boolean_map_in.shape, float_map_in.shape, scalars.shape)
+                    boolean_map_in = state_bool_arr[batch] #[tf.newaxis, ...]
+                    float_map_in = state_float_arr[batch] #[tf.newaxis, ...]
+                    scalars = np.array(state_scaler[batch], dtype=np.single) #[tf.newaxis, ...]
 
                     old_probs = tf.convert_to_tensor(old_prob_arr[batch])
                     actions = tf.convert_to_tensor(action_arr[batch])
@@ -230,7 +228,7 @@ class PPOAgent(object):
                     zip(critic_grads, critic_params))
         self.memory.clear_memory()
 
-    def store_transition(self, state, action, probs, vals, reward, done):  #TODO: store_transition to be called from base.environment
+    def store_transition(self, state, action, probs, vals, reward, done):
         self.memory.store_memory(state, action, probs, vals, reward, done)
 
     def get_exploitation_action(self, state):
