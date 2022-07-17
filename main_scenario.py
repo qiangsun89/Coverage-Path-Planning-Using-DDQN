@@ -4,7 +4,6 @@ import os
 import numpy as np
 
 from src.CPP.Environment import CPPEnvironment
-from src.DH.Environment import DHEnvironment
 from utils import override_params, read_config, get_bool_user
 
 
@@ -28,8 +27,6 @@ def scenario(args, params):
     env = None
     if args.cpp:
         env = CPPEnvironment(params)
-    elif args.dh:
-        env = DHEnvironment(params)
     else:
         print("Need --cpp or --dh")
         exit(1)
@@ -41,7 +38,6 @@ def scenario(args, params):
         scenario = read_config(args.scenario)
         init_state = env.grid.create_scenario(scenario)
 
-    env.test_episode(init_state)
     env.display.display_episode(env.grid.map_image, env.stats.trajectory, plot=True)
     if args.video:
         save_video(env)

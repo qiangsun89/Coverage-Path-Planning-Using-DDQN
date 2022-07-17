@@ -3,7 +3,6 @@ import tensorflow as tf
 
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, Concatenate, Input, AvgPool2D
-#from tensorflow.keras.optimizers import Adam
 import tensorflow_probability as tfp
 from src.PPO_new.Memory_ import PPOMemory
 
